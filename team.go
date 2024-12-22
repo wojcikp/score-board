@@ -1,8 +1,8 @@
 package main
 
 type Team struct {
-	name   string
-	scores int
+	Name   string
+	Scores int
 }
 
 func NewTeam(name string) *Team {
@@ -10,11 +10,11 @@ func NewTeam(name string) *Team {
 }
 
 func (t *Team) addOnePoint() {
-	t.scores++
+	t.Scores++
 }
 
 func (t *Team) removeOnePoint() {
-	if t.scores > 0 {
-		t.scores--
+	if t.Scores > 0 {
+		t.Scores--
 	}
 }

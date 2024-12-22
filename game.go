@@ -8,8 +8,8 @@ import (
 var games []Game
 
 type Game struct {
-	homeTeam *Team
-	awayTeam *Team
+	HomeTeam *Team
+	AwayTeam *Team
 }
 
 func NewGame(homeTeam, awayTeam *Team) Game {
@@ -17,13 +17,13 @@ func NewGame(homeTeam, awayTeam *Team) Game {
 }
 
 func (g *Game) getInfo() string {
-	return fmt.Sprintf("%s: %d - %s: %d", g.homeTeam.name, g.homeTeam.scores, g.awayTeam.name, g.awayTeam.scores)
+	return fmt.Sprintf("%s: %d - %s: %d", g.HomeTeam.Name, g.HomeTeam.Scores, g.AwayTeam.Name, g.AwayTeam.Scores)
 }
 
 func getSortedGames(games []Game) []Game {
 	sort.SliceStable(games, func(i, j int) bool {
-		scoreI := games[i].homeTeam.scores + games[i].awayTeam.scores
-		scoreJ := games[j].homeTeam.scores + games[j].awayTeam.scores
+		scoreI := games[i].HomeTeam.Scores + games[i].AwayTeam.Scores
+		scoreJ := games[j].HomeTeam.Scores + games[j].AwayTeam.Scores
 
 		if scoreI != scoreJ {
 			return scoreI > scoreJ

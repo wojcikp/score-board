@@ -72,13 +72,13 @@ func (b ScoreBoard) startNewGame() {
 	for {
 		clearConsole()
 		scanner := bufio.NewScanner(os.Stdin)
-		fmt.Printf("%s: %d vs. %s: %d\n", homeTeam.name, homeTeam.scores, awayTeam.name, awayTeam.scores)
+		fmt.Printf("%s: %d vs. %s: %d\n", homeTeam.Name, homeTeam.Scores, awayTeam.Name, awayTeam.Scores)
 		fmt.Println("Options: ")
 		fmt.Println("-------------------------")
-		fmt.Printf("1. %s scored!\n", homeTeam.name)
-		fmt.Printf("2. %s scored!\n", awayTeam.name)
-		fmt.Printf("3. Remove one point from the %s team\n", homeTeam.name)
-		fmt.Printf("4. Remove one point from the %s team\n", awayTeam.name)
+		fmt.Printf("1. %s scored!\n", homeTeam.Name)
+		fmt.Printf("2. %s scored!\n", awayTeam.Name)
+		fmt.Printf("3. Remove one point from the %s team\n", homeTeam.Name)
+		fmt.Printf("4. Remove one point from the %s team\n", awayTeam.Name)
 		fmt.Println("5. Finish game")
 
 		scanner.Scan()
@@ -235,7 +235,7 @@ func (b ScoreBoard) updateGameScore() {
 		editGame := games[choice-1]
 		fmt.Println("Match", editGame.getInfo(), "score editing...")
 
-		fmt.Println("What is the new", editGame.homeTeam.name, "score?")
+		fmt.Println("What is the new", editGame.HomeTeam.Name, "score?")
 		scanner.Scan()
 		input = scanner.Text()
 		input = strings.TrimSpace(input)
@@ -247,7 +247,7 @@ func (b ScoreBoard) updateGameScore() {
 			continue
 		}
 
-		fmt.Println("What is the new", editGame.awayTeam.name, "score?")
+		fmt.Println("What is the new", editGame.AwayTeam.Name, "score?")
 		scanner.Scan()
 		input = scanner.Text()
 		input = strings.TrimSpace(input)
@@ -259,8 +259,8 @@ func (b ScoreBoard) updateGameScore() {
 			continue
 		}
 
-		editGame.homeTeam.scores = newHomeTeamScore
-		editGame.awayTeam.scores = newAwayTeamScore
+		editGame.HomeTeam.Scores = newHomeTeamScore
+		editGame.AwayTeam.Scores = newAwayTeamScore
 
 		fmt.Println("Editing operation successful. New scores:", editGame.getInfo())
 		fmt.Println("Press Enter to continue...")
