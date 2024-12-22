@@ -26,8 +26,7 @@ type Game struct {
 var games []Game
 
 func main() {
-	board := NewScoreBoard()
-	board.promptHelloScreen()
+	initBoard()
 }
 
 func NewScoreBoard() ScoreBoard {
@@ -42,7 +41,8 @@ func NewGame(homeTeam, awayTeam Team) *Game {
 	return &Game{homeTeam, awayTeam}
 }
 
-func (b ScoreBoard) promptHelloScreen() {
+func initBoard() {
+	board := NewScoreBoard()
 	for {
 		scanner := bufio.NewScanner(os.Stdin)
 		clearConsole()
@@ -69,11 +69,11 @@ func (b ScoreBoard) promptHelloScreen() {
 
 		switch choice {
 		case 1:
-			b.startNewGame()
+			board.startNewGame()
 		case 2:
-			b.getSummaryOfGames()
+			board.getSummaryOfGames()
 		case 3:
-			b.updateGameScore()
+			board.updateGameScore()
 		case 4:
 			fmt.Println("Exiting...")
 			return
