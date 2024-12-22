@@ -141,19 +141,32 @@ func (b ScoreBoard) startNewGame() {
 }
 
 func getTeamNames() (string, string) {
+	var homeTeamName, awayTeamName string
 	for {
 		clearConsole()
 		scanner := bufio.NewScanner(os.Stdin)
 		fmt.Println("Start new game")
 		fmt.Println("-------------------------")
 
+		for {
+			if homeTeamName == "" {
 		fmt.Println("Enter a name of the Home team and press Enter:")
 		scanner.Scan()
-		homeTeamName := scanner.Text()
+				homeTeamName = scanner.Text()
+			} else {
+				break
+			}
+		}
 
+		for {
+			if awayTeamName == "" {
 		fmt.Println("Enter a name of the Away team and press Enter:")
 		scanner.Scan()
-		awayTeamName := scanner.Text()
+				awayTeamName = scanner.Text()
+			} else {
+				break
+			}
+		}
 
 		fmt.Println("The game is about to start")
 		fmt.Println("Home team: ", homeTeamName)
@@ -178,6 +191,8 @@ func getTeamNames() (string, string) {
 			return homeTeamName, awayTeamName
 		case 2:
 			fmt.Println("Correcting team names...")
+			homeTeamName = ""
+			awayTeamName = ""
 			time.Sleep(3 * time.Second)
 			continue
 		default:
