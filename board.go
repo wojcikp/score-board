@@ -40,6 +40,7 @@ func initBoard() {
 		if err != nil || choice < 1 || choice > 4 {
 			fmt.Println("Invalid input. Please enter a number 1, 2, 3 or 4.")
 			fmt.Println("Press Enter to continue...")
+			scanner.Scan()
 			continue
 		}
 
@@ -55,7 +56,8 @@ func initBoard() {
 			return
 		default:
 			fmt.Println("Invalid input. Please enter a number 1, 2, 3 or 4.")
-			time.Sleep(3 * time.Second)
+			fmt.Println("Press Enter to continue...")
+			scanner.Scan()
 			continue
 		}
 
@@ -72,6 +74,7 @@ func (b ScoreBoard) startNewGame() {
 		scanner := bufio.NewScanner(os.Stdin)
 		fmt.Printf("%s: %d vs. %s: %d\n", homeTeam.name, homeTeam.scores, awayTeam.name, awayTeam.scores)
 		fmt.Println("Options: ")
+		fmt.Println("-------------------------")
 		fmt.Printf("1. %s scored!\n", homeTeam.name)
 		fmt.Printf("2. %s scored!\n", awayTeam.name)
 		fmt.Printf("3. Remove one point from the %s team\n", homeTeam.name)
@@ -128,7 +131,7 @@ func getTeamNamesInput() (string, string) {
 			if homeTeamName == "" {
 				fmt.Println("Enter a name of the Home team and press Enter:")
 				scanner.Scan()
-				homeTeamName = scanner.Text()
+				homeTeamName = strings.TrimSpace(scanner.Text())
 			} else {
 				break
 			}
@@ -138,7 +141,7 @@ func getTeamNamesInput() (string, string) {
 			if awayTeamName == "" {
 				fmt.Println("Enter a name of the Away team and press Enter:")
 				scanner.Scan()
-				awayTeamName = scanner.Text()
+				awayTeamName = strings.TrimSpace(scanner.Text())
 			} else {
 				break
 			}
@@ -237,8 +240,8 @@ func (b ScoreBoard) updateGameScore() {
 		input = scanner.Text()
 		input = strings.TrimSpace(input)
 		newHomeTeamScore, err := strconv.Atoi(input)
-		if err != nil {
-			fmt.Println("Invalid input. Please enter a number.")
+		if err != nil || newHomeTeamScore < 0 {
+			fmt.Println("Invalid input. Please enter a number greater than 0 or equal.")
 			fmt.Println("Press Enter to continue...")
 			scanner.Scan()
 			continue
@@ -249,8 +252,8 @@ func (b ScoreBoard) updateGameScore() {
 		input = scanner.Text()
 		input = strings.TrimSpace(input)
 		newAwayTeamScore, err := strconv.Atoi(input)
-		if err != nil {
-			fmt.Println("Invalid input. Please enter a number.")
+		if err != nil || newAwayTeamScore < 0 {
+			fmt.Println("Invalid input. Please enter a number greater than 0 or equal.")
 			fmt.Println("Press Enter to continue...")
 			scanner.Scan()
 			continue
