@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/exec"
 	"runtime"
+	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -19,8 +20,8 @@ type Team struct {
 }
 
 type Game struct {
-	homeTeam Team
-	awayTeam Team
+	homeTeam *Team
+	awayTeam *Team
 }
 
 var games []Game
@@ -37,15 +38,15 @@ func NewTeam(name string) *Team {
 	return &Team{name, 0}
 }
 
-func NewGame(homeTeam, awayTeam Team) *Game {
+func NewGame(homeTeam, awayTeam *Team) *Game {
 	return &Game{homeTeam, awayTeam}
 }
 
 func initBoard() {
 	board := NewScoreBoard()
 	for {
-		scanner := bufio.NewScanner(os.Stdin)
 		clearConsole()
+		scanner := bufio.NewScanner(os.Stdin)
 
 		fmt.Println("Football World Cup Score Board")
 		fmt.Println("-------------------------")
@@ -90,7 +91,7 @@ func (b ScoreBoard) startNewGame() {
 	homeTeamName, awayTeamName := getTeamNames()
 	homeTeam := NewTeam(homeTeamName)
 	awayTeam := NewTeam(awayTeamName)
-	game := NewGame(*homeTeam, *awayTeam)
+	game := NewGame(homeTeam, awayTeam)
 	for {
 		clearConsole()
 		scanner := bufio.NewScanner(os.Stdin)
@@ -150,8 +151,8 @@ func getTeamNames() (string, string) {
 
 		for {
 			if homeTeamName == "" {
-		fmt.Println("Enter a name of the Home team and press Enter:")
-		scanner.Scan()
+				fmt.Println("Enter a name of the Home team and press Enter:")
+				scanner.Scan()
 				homeTeamName = scanner.Text()
 			} else {
 				break
@@ -160,8 +161,8 @@ func getTeamNames() (string, string) {
 
 		for {
 			if awayTeamName == "" {
-		fmt.Println("Enter a name of the Away team and press Enter:")
-		scanner.Scan()
+				fmt.Println("Enter a name of the Away team and press Enter:")
+				scanner.Scan()
 				awayTeamName = scanner.Text()
 			} else {
 				break
@@ -205,9 +206,25 @@ func getTeamNames() (string, string) {
 
 func (b ScoreBoard) getSummaryOfGames() {
 	clearConsole()
+	scanner := bufio.NewScanner(os.Stdin)
+
+	tempGames := make([]Game, len(games))
+	copy(tempGames, games)
+	sortedGames := getSortedGames(tempGames)
+
 	fmt.Println("Summary of games:")
-	time.Sleep(2 * time.Second)
-	return
+	if len(sortedGames) == 0 {
+		fmt.Println("No games played yet")
+		fmt.Println("Press Enter to close the games summary view...")
+		scanner.Scan()
+		return
+	}
+	for i, game := range sortedGames {
+		fmt.Printf("%d. %s\n", i+1, game.getInfo())
+	}
+
+	fmt.Println("Press Enter to close the games summary view...")
+	scanner.Scan()
 }
 
 func (b ScoreBoard) updateGameScore() {
@@ -225,6 +242,23 @@ func (t *Team) removeOnePoint() {
 	if t.scores > 0 {
 		t.scores--
 	}
+}
+
+func getSortedGames(games []Game) []Game {
+	sort.SliceStable(games, func(i, j int) bool {
+		scoreI := games[i].homeTeam.scores + games[i].awayTeam.scores
+		scoreJ := games[j].homeTeam.scores + games[j].awayTeam.scores
+
+		if scoreI != scoreJ {
+			return scoreI > scoreJ
+		}
+		return true
+	})
+	return games
+}
+
+func (g *Game) getInfo() string {
+	return fmt.Sprintf("%s: %d - %s: %d", g.homeTeam.name, g.homeTeam.scores, g.awayTeam.name, g.awayTeam.scores)
 }
 
 func clearConsole() {
