@@ -38,8 +38,8 @@ func NewTeam(name string) *Team {
 	return &Team{name, 0}
 }
 
-func NewGame(homeTeam, awayTeam *Team) *Game {
-	return &Game{homeTeam, awayTeam}
+func NewGame(homeTeam, awayTeam *Team) Game {
+	return Game{homeTeam, awayTeam}
 }
 
 func initBoard() {
@@ -129,7 +129,7 @@ func (b ScoreBoard) startNewGame() {
 			continue
 		case 5:
 			fmt.Println("Finishing game...")
-			games = append(games, *game)
+			games = append(games, game)
 			time.Sleep(3 * time.Second)
 			return
 		default:
@@ -228,10 +228,67 @@ func (b ScoreBoard) getSummaryOfGames() {
 }
 
 func (b ScoreBoard) updateGameScore() {
-	clearConsole()
-	fmt.Println("Update game score")
-	time.Sleep(2 * time.Second)
-	return
+	for {
+		clearConsole()
+		scanner := bufio.NewScanner(os.Stdin)
+
+		fmt.Println("Choose a match to edit scores: ")
+		if len(games) == 0 {
+			fmt.Println("No games played yet")
+			fmt.Println("Press Enter to close the update game score view...")
+			scanner.Scan()
+			return
+		}
+		for i, game := range games {
+			fmt.Println(i+1, game.getInfo())
+		}
+
+		scanner.Scan()
+		input := scanner.Text()
+		input = strings.TrimSpace(input)
+		choice, err := strconv.Atoi(input)
+		if err != nil || choice < 1 || choice > len(games) {
+			fmt.Printf("Invalid input. Please enter a number between 1 and %d.\n", len(games))
+			fmt.Println("Press Enter to continue...")
+			scanner.Scan()
+			continue
+		}
+
+		editGame := games[choice-1]
+		fmt.Println("Match", editGame.getInfo(), "score editing...")
+
+		fmt.Println("What is the new", editGame.homeTeam.name, "score?")
+		scanner.Scan()
+		input = scanner.Text()
+		input = strings.TrimSpace(input)
+		newHomeTeamScore, err := strconv.Atoi(input)
+		if err != nil {
+			fmt.Println("Invalid input. Please enter a number.")
+			fmt.Println("Press Enter to continue...")
+			scanner.Scan()
+			continue
+		}
+
+		fmt.Println("What is the new", editGame.awayTeam.name, "score?")
+		scanner.Scan()
+		input = scanner.Text()
+		input = strings.TrimSpace(input)
+		newAwayTeamScore, err := strconv.Atoi(input)
+		if err != nil {
+			fmt.Println("Invalid input. Please enter a number.")
+			fmt.Println("Press Enter to continue...")
+			scanner.Scan()
+			continue
+		}
+
+		editGame.homeTeam.scores = newHomeTeamScore
+		editGame.awayTeam.scores = newAwayTeamScore
+
+		fmt.Println("Editing operation successful. New scores:", editGame.getInfo())
+		fmt.Println("Press Enter to continue...")
+		scanner.Scan()
+		return
+	}
 }
 
 func (t *Team) addOnePoint() {
