@@ -20,7 +20,7 @@ func (g *Game) getInfo() string {
 	return fmt.Sprintf("%s: %d - %s: %d", g.HomeTeam.Name, g.HomeTeam.Scores, g.AwayTeam.Name, g.AwayTeam.Scores)
 }
 
-func getSortedGames(games []Game) []Game {
+func sortGames(games []Game) {
 	sort.SliceStable(games, func(i, j int) bool {
 		scoreI := games[i].HomeTeam.Scores + games[i].AwayTeam.Scores
 		scoreJ := games[j].HomeTeam.Scores + games[j].AwayTeam.Scores
@@ -30,5 +30,4 @@ func getSortedGames(games []Game) []Game {
 		}
 		return true
 	})
-	return games
 }

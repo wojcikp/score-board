@@ -186,9 +186,9 @@ func (b ScoreBoard) getSummaryOfGames() {
 	clearConsole()
 	scanner := bufio.NewScanner(os.Stdin)
 
-	tempGames := make([]Game, len(games))
-	copy(tempGames, games)
-	sortedGames := getSortedGames(tempGames)
+	sortedGames := make([]Game, len(games))
+	copy(sortedGames, games)
+	sortGames(sortedGames)
 
 	fmt.Println("Summary of games:")
 	if len(sortedGames) == 0 {
