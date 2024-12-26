@@ -12,6 +12,10 @@ type Game struct {
 	AwayTeam *Team
 }
 
+func (g Game) String() string {
+	return fmt.Sprintf("%s vs %s", g.HomeTeam, g.AwayTeam)
+}
+
 func NewGame(homeTeam, awayTeam *Team) Game {
 	return Game{homeTeam, awayTeam}
 }

@@ -61,9 +61,9 @@ func TestGetSortedGames(t *testing.T) {
 	}
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			got := getSortedGames(tc.in)
-			if diff := cmp.Diff(got, tc.want); diff != "" {
-				t.Errorf("ERROR: getSortedGames(%v) == %v,\nwant %v\ndiff:\n%v", tc.in, got, tc.want, diff)
+			sortGames(tc.in)
+			if diff := cmp.Diff(tc.in, tc.want); diff != "" {
+				t.Errorf("ERROR: \nGot:\n%+v\nWant:\n%+v\nDiff:\n%s", tc.in, tc.want, diff)
 			}
 		})
 	}
